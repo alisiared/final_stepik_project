@@ -11,7 +11,9 @@ links = [pytest.param(f"{product_link_base}/?promo=offer{number}",
 
 
 # @pytest.mark.xfail(reason="плохой номер")
+
 @pytest.mark.parametrize('url', links)
+@pytest.mark.need_review
 def test_guest_can_add_product_to_basket(browser, url):
     page = ProductPage(browser, url)
     page.open()
@@ -38,19 +40,27 @@ def test_success_message_is_not_presented(browser):
     page.open()
     page.success_message_is_not_presented()
     
-          
+
 def test_guest_should_see_login_link_on_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
     page = ProductPage(browser, link)
     page.open()
     page.should_be_login_link()
 
+@pytest.mark.need_review
 def test_guest_can_go_to_login_page_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
     page = ProductPage(browser, link)
     page.open()
     page.go_to_login_page()
-
+    
+@pytest.mark.need_review
+def test_guest_success_message_is_not_presented(self, browser):
+    url = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/'
+    page = ProductPage(browser, url)
+    page.open()
+    page.success_message_is_not_presented()
+    
 class TestUserAddToBasketFromProductPage():
     @pytest.fixture(scope="function", autouse=True)
     def setup(self, browser):
@@ -65,16 +75,16 @@ class TestUserAddToBasketFromProductPage():
         login_page.register_new_user(email=page_email, password=page_password, c_password=page_c_password)
         time.sleep(10)
         login_page.should_be_authorized_user()
-     
+
+    @pytest.mark.need_review
     def test_user_can_add_product_to_basket(self, browser):
         url = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/'
         page = ProductPage(browser, url)
         page.open()
         page.guest_can_add_product_to_basket()
-        
+
     def test_user_success_message_is_not_presented(self, browser):
         url = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/'
         page = ProductPage(browser, url)
         page.open()
         page.success_message_is_not_presented()
-        
